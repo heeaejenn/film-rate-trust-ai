@@ -7,6 +7,7 @@ import json
 import pandas as pd
 
 
+# 영화 cid 추출
 def get_cid(title):
     url = f"https://search.naver.com/search.naver?where=nexearch&sm=tab_etc&pkid=68&qvt=0&query={title}"
 
@@ -17,6 +18,7 @@ def get_cid(title):
     return cid
 
 
+# 영화 데이터 추출
 def make_movie_data(title):
     cid = get_cid(title)
     page = 1
@@ -79,72 +81,18 @@ def make_movie_data(title):
     return df
 
 
-# load_dotenv()
-# client = OpenAI()
+# 추출된 데이터 전처리 및 csv 파일 생성
+def crawl_to_csv(title):
+    df = make_movie_data(title)
+    df["reviews"] = df["reviews"].apply(
+        lambda x: re.sub(r"[^가-힣\s]", "", str(x)) if pd.notna(x) else x
+    )
 
-# system_prompt = """리뷰 감정 분석이 필요합니다.
-# 긍정 또는 부정으로 판단해주세요.
-# 긍정이면 값이 1 이고, 부정이면 0 으로 표현하면 됩니다.
-# 여러개의 영화 리뷰를 감정 분석하여 리뷰별로 출력하세요.
-# json 형식으로 출력해주세요."""
+    # 빈 행 삭제 (한글만 남긴 후 빈 행이 생길 수 있음)
+    df = df.dropna(subset=["reviews"])  # None 값 제거
+    df = df[df["reviews"].str.strip() != ""]  # 공백만 있는 값 제거
 
-
-# def sentiment_data(review, system_prompt=system_prompt, num=0, retry=True):
-#     user_prompt = ""
-#     for i, r in enumerate(review, 1):
-#         user_prompt += f"review_{num + i}: {r}\n"
-#     response = client.chat.completions.create(
-#         model="gpt-4o-mini",
-#         messages=[
-#             {"role": "system", "content": system_prompt},
-#             {
-#                 "role": "user",
-#                 "content": """
-#             {'review_1': '영화가 너무 재밌어요. 추천합니다.', 'review_2': '이 영화는 별로에요. 추천하지 않아요.'}
-#             """,
-#             },
-#             {"role": "assistant", "content": '{"review_1": 1, "review_2": 0}'},
-#             {"role": "user", "content": user_prompt},
-#         ],
-#         response_format={"type": "json_object"},
-#         temperature=0,
-#     )
-
-#     sentiment_result = response.choices[0].message.content
-#     try:
-#         sentiment_result = json.loads(sentiment_result)
-#         return sentiment_result
-#     except json.JSONDecodeError as e:
-#         if retry:
-#             return sentiment_data(review, system_prompt, num, retry=False)
-#         else:
-#             print(e)
+    return df.to_csv(f"{title}_data.csv")
 
 
-title = "베테랑2"
-
-df = make_movie_data(title)
-reviews = [i for i in df["reviews"]]
-
-result_data = {}
-chunk_size = 10
-
-# for r in range(0, len(reviews), chunk_size):
-#     result = sentiment_data(reviews[r : r + chunk_size], num=r)
-#     result_data.update(result)
-#     print(len(result))
-
-# sentiment_values = [v for v in result_data.values()]
-# df["sentiment"] = sentiment_values
-
-
-# 1. 'reviews' 열에서 빈칸(공백문자 포함) 또는 NaN인 행 제거
-df["reviews"] = df["reviews"].replace(
-    r"^\s*$", None, regex=True
-)  # 빈 문자열을 None으로 변환
-df = df.dropna(subset=["reviews"])  # NaN 값 제거
-
-# 2. 'reviews' 열의 각 값에서 구두점 제거
-df["reviews"] = df["reviews"].apply(lambda x: re.sub(r"[^가-힣0-9\s]", "", x))
-
-df.to_csv(f"{title}_movie_sentiment.csv")
+crawl_to_csv("비긴어게인")
