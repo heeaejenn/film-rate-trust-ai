@@ -1,5 +1,3 @@
-# from dotenv import load_dotenv
-# from openai import OpenAI
 import requests
 from bs4 import BeautifulSoup
 import re
