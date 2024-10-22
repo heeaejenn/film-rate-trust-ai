@@ -42,5 +42,5 @@ make_movie_data 함수로 반환된 DataFrame의 reviews열을 정규표현식�
 
 ## 사용법
 ```
->>>python movie_data_crawl.py [영화제목]
+$ python movie_data_crawl.py [영화제목]
 ```
