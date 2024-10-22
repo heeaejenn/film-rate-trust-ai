@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import re
 import json
 import pandas as pd
+import sys
 
 
 # 영화 cid 추출
@@ -93,4 +94,9 @@ def crawl_to_csv(title):
     return df.to_csv(f"{title}_data.csv")
 
 
-crawl_to_csv("비긴어게인")
+if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        argument = sys.argv[1]
+        crawl_to_csv(argument)
+    else:
+        print("No argument provided.")
