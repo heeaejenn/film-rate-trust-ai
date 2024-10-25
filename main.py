@@ -1,5 +1,7 @@
 import streamlit as st
 
+st.set_page_config(page_title="FilmRateTrust AI", page_icon="data/ai_icon.webp", layout="centered", initial_sidebar_state="auto", menu_items=None)
+
 # 홈 목록
 home = st.Page("pages/home.py", title="FilmRateTrust AI 소개", default=True)
 
@@ -17,3 +19,4 @@ pg = st.navigation(
     }
 )
 pg.run()
+

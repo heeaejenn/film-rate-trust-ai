@@ -1,7 +1,5 @@
 import streamlit as st
 
-st.set_page_config(page_title="FilmRateTrust AI", page_icon="data/ai_icon.webp", layout="centered", initial_sidebar_state="auto", menu_items=None)
-
 st.title('FilmRateTrust AI')
 st.subheader('영화 관람평 평가 AI')
 
