@@ -6,6 +6,13 @@ st.markdown('<span style="font-size: 18px;">네이버 리뷰 평점 별 관람�
 
 st.image("data/movie_poster/joker.jpeg", width=200, use_column_width=False)
 
+## sql DB 연결
+
+# Initialize connection.
+conn = st.connection('mysql', type='sql')
+# Perform query.
+df = conn.query('SELECT * from summarized_reviews;', ttl=600)
+
 selected_option = ranking_selectbox()
 
 if st.button("조회하기"):

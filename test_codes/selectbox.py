@@ -13,12 +13,6 @@ data_df = pd.DataFrame(
     }
 )
 
-## sql DB 연결
-
-# Initialize connection.
-conn = st.connection('mysql', type='sql')
-# Perform query.
-df = conn.query('SELECT * from summarized_reviews;', ttl=600)
 
 def ranking_selectbox():
     option = st.selectbox(
