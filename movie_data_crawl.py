@@ -1,10 +1,14 @@
+import sys
 import requests
 from bs4 import BeautifulSoup
 import re
 import json
 import pandas as pd
-import sys
+import pymysql
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 
 # 영화 cid 추출
 def get_cid(title):
@@ -53,11 +57,11 @@ def make_movie_data(title):
 
             # 인덱스가 유효하면 해당 부분 문자열 추출
             if (
-                first_bracket != -1
-                and last_bracket != -1
-                and first_bracket < last_bracket
+                    first_bracket != -1
+                    and last_bracket != -1
+                    and first_bracket < last_bracket
             ):
-                return s[first_bracket : last_bracket + 1]
+                return s[first_bracket: last_bracket + 1]
 
         a = extract_substring(text)
 
@@ -80,8 +84,8 @@ def make_movie_data(title):
     return df
 
 
-# 추출된 데이터 전처리 및 csv 파일 생성
-def crawl_to_csv(title):
+# 추출된 데이터 전처리 및 db저장
+def crawl_to_db(title):
     df = make_movie_data(title)
     df["reviews"] = df["reviews"].apply(
         lambda x: re.sub(r"[^가-힣\s]", "", str(x)) if pd.notna(x) else x
@@ -91,12 +95,45 @@ def crawl_to_csv(title):
     df = df.dropna(subset=["reviews"])  # None 값 제거
     df = df[df["reviews"].str.strip() != ""]  # 공백만 있는 값 제거
 
-    return df.to_csv(f"{title}_data.csv")
+    host = os.getenv('DB_HOST')
+    port = os.getenv('DB_PORT')
+    user = os.getenv('DB_USER')
+    passwd = os.getenv('DB_PASSWD')
+    db_name = os.getenv('DB_NAME')
 
+    con = pymysql.connect(
+        host=host,
+        port=int(port),
+        user=user,
+        passwd=passwd,
+        db=db_name,
+        charset="utf8",
+    )
+
+    cur = con.cursor()
+
+    # movie 테이블에 title 컬럼에 입력받은 영화 제목 추가
+    add_movie_query = f"insert into movie (title) values ('{title}');"
+    cur.execute(add_movie_query)
+
+    # movie_id 검색
+    movie_id_query = f"select id from movie where title='{title}';"
+
+    # 검색한 값 확인
+    cur.execute(movie_id_query)
+    movie_id = cur.fetchone()
+
+    # df의 reviews와 star 열 값을 db의  insert original_rating, review 행에 추가
+    for star, review in zip(df["star"], df["reviews"]):
+        insert_query = f"INSERT INTO reviews (movie_id, original_rating, review) VALUES ({movie_id[0]}, {star}, '{review}');"
+        cur.execute(insert_query)
+
+    con.commit()
+    con.close()
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         argument = sys.argv[1]
-        crawl_to_csv(argument)
+        crawl_to_db(argument)
     else:
         print("No argument provided.")
