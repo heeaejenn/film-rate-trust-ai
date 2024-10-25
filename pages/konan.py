@@ -9,8 +9,8 @@ st.image("data/movie_poster/konan.jpeg", width=200, use_column_width=False)
 
 ## sql DB 연결
 
-# Initialize connection.
-conn = st.connection('mysql', type='sql')
+# Initialize connection using st.secrets.
+conn = st.connection('mysql', type='sql', **st.secrets["mysql"])
 # Perform query.
 df = conn.query('SELECT * from summarized_reviews;', ttl=600)
 
