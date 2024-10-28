@@ -2,7 +2,7 @@ import pymysql
 import pandas as pd
 import os
 from DataCreator import DataCreator
-
+from contextlib import closing
 
 class ReviewPredictor:
     def __init__(self, db_config):
@@ -61,5 +61,32 @@ class ReviewPredictor:
         result = data_creator.predict_sentiment(num_samples)
 
         return result
+
+    def insert_reviews(self,new_ratings, sentiment_scores):
+        try:
+            with closing(pymysql.connect(
+                    host=self.host,
+                    # port=self.port,
+                    user=self.user,
+                    passwd=self.passwd,
+                    db=self.db_name,
+                    charset="utf8",
+            )) as db:
+                with db.cursor() as cursor:
+                    # 여러 행을 한 번에 삽입하기 위한 데이터 준비
+                    data = [(rating, score) for rating, score in zip(new_ratings, sentiment_scores)]
+
+                    # 한 번의 쿼리로 모든 데이터 삽입
+                    sql = "INSERT INTO reviews (new_rating, sentiment_score) VALUES (%s, %s)"
+                    cursor.executemany(sql, data)
+
+                    # 변경사항 커밋
+                    db.commit()
+        except Exception as e:
+            print(f"Error occurred: {e}")
+            if 'db' in locals():
+                db.rollback()
+
+
 
 
