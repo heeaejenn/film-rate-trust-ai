@@ -76,11 +76,15 @@ class ReviewPredictor:
                     for _, row in data.iterrows():
                         sentiment_score = row['sentiment_score']
                         new_rating = row['new_rating']
+                        review_text = row['review']  # 리뷰 텍스트를 고유 식별자로 사용
 
-                        # 각 행에 대해 sentiment_score와 new_rating 값을 업데이트
-                        sql = """UPDATE reviews
-                        SET new_rating = %s, sentiment_score = %s LIMIT 1;"""
-                        cursor.execute(sql, (new_rating, sentiment_score))
+                        # 특정 리뷰에 대해 sentiment_score와 new_rating 값을 업데이트
+                        sql = """
+                        UPDATE reviews
+                        SET new_rating = %s, sentiment_score = %s
+                        WHERE review = %s;
+                        """
+                        cursor.execute(sql, (new_rating, sentiment_score, review_text))
 
                     # 변경사항 커밋
                     db.commit()
