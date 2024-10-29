@@ -7,7 +7,7 @@ from contextlib import closing
 class ReviewPredictor:
     def __init__(self, db_config):
         self.host = db_config['DB_HOST']
-        # self.port = int(db_config['DB_PORT'])
+        self.port = int(db_config['DB_PORT'])
         self.user = db_config['DB_USER']
         self.passwd = db_config['DB_PASSWD']
         self.db_name = db_config['DB_NAME']
@@ -18,7 +18,7 @@ class ReviewPredictor:
         """Connect to the database and return the connection object."""
         return pymysql.connect(
             host=self.host,
-            # port=self.port,
+            port=self.port,
             user=self.user,
             passwd=self.passwd,
             db=self.db_name,
@@ -62,23 +62,25 @@ class ReviewPredictor:
 
         return result
 
-    def insert_reviews(self,new_ratings, sentiment_scores):
+    def insert_reviews(self, data):
         try:
             with closing(pymysql.connect(
                     host=self.host,
-                    # port=self.port,
+                    port=self.port,
                     user=self.user,
                     passwd=self.passwd,
                     db=self.db_name,
                     charset="utf8",
             )) as db:
                 with db.cursor() as cursor:
-                    # 여러 행을 한 번에 삽입하기 위한 데이터 준비
-                    data = [(rating, score) for rating, score in zip(new_ratings, sentiment_scores)]
+                    for _, row in data.iterrows():
+                        sentiment_score = row['sentiment_score']
+                        new_rating = row['new_rating']
 
-                    # 한 번의 쿼리로 모든 데이터 삽입
-                    sql = "INSERT INTO reviews (new_rating, sentiment_score) VALUES (%s, %s)"
-                    cursor.executemany(sql, data)
+                        # 각 행에 대해 sentiment_score와 new_rating 값을 업데이트
+                        sql = """UPDATE reviews
+                        SET new_rating = %s, sentiment_score = %s LIMIT 1;"""
+                        cursor.execute(sql, (new_rating, sentiment_score))
 
                     # 변경사항 커밋
                     db.commit()
@@ -86,6 +88,10 @@ class ReviewPredictor:
             print(f"Error occurred: {e}")
             if 'db' in locals():
                 db.rollback()
+
+
+
+
 
 
 
