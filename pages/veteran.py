@@ -2,6 +2,7 @@ import pymysql
 import streamlit as st
 import sys
 import os
+import pandas as pd
 
 # test_codes의 절대 경로 추가 (직접 지정)
 sys.path.append(r'C:/Users/kwkwo/film-rate-trust-ai/test_codes')
@@ -22,8 +23,20 @@ conn = pymysql.connect(
     password=st.secrets["mysql"]["password"],
     database=st.secrets["mysql"]["database"])
 
-# Perform query.
-df = conn.query('SELECT * from summarized_reviews;')
+try:
+    # 데이터베이스 작업 수행
+    with conn.cursor() as cursor:
+        cursor.execute('SELECT * FROM summarized_reviews;')
+        result = cursor.fetchall()
+        # DataFrame 생성
+        df = pd.DataFrame(result, columns=[col[0] for col in cursor.description])
+finally:
+    # 데이터베이스 연결 닫기
+    conn.close()
+
+# movie_id와 rating 열을 숫자로 변환
+df['movie_id'] = pd.to_numeric(df['movie_id'], errors='coerce')
+df['rating'] = pd.to_numeric(df['rating'], errors='coerce')
 
 selected_option = ranking_selectbox()
 
