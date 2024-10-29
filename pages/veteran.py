@@ -4,8 +4,8 @@ import sys
 import os
 import pandas as pd
 
-# test_codes의 절대 경로 추가 (직접 지정)
-sys.path.append(r'C:/Users/kwkwo/film-rate-trust-ai/test_codes')
+# 테스트 코드가 있는 디렉토리를 경로에 추가
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../test_codes')))
 
 # selectbox 모듈 가져오기
 from selectbox import *
