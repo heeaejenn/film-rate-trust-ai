@@ -1,0 +1,51 @@
+-- 테이블 순서는 관계를 고려하여 한 번에 실행해도 에러가 발생하지 않게 정렬되었습니다.
+-- movie Table Create SQL
+-- 테이블 생성 SQL - movie
+CREATE TABLE movie
+(
+    `id`     INT     NOT NULL    AUTO_INCREMENT COMMENT '영화id', 
+    `title`  TEXT    NOT NULL    COMMENT '영화 제목', 
+     PRIMARY KEY (id)
+);
+-- 테이블 Comment 설정 SQL - movie
+ALTER TABLE movie COMMENT '영화 목록';
+-- reviews Table Create SQL
+-- 테이블 생성 SQL - reviews
+CREATE TABLE reviews
+(
+    `id`               INT      NOT NULL    AUTO_INCREMENT COMMENT '리뷰id', 
+    `movie_id`         INT      NOT NULL    COMMENT '영화id', 
+    `review`           TEXT     NULL        COMMENT '리뷰 내용', 
+    `original_rating`  INT      NULL        COMMENT '원래 별점', 
+    `sentiment_score`  FLOAT    NULL        COMMENT '긍정도', 
+    `new_rating`       FLOAT    NULL        COMMENT '분석된 별점', 
+     PRIMARY KEY (id)
+);
+-- 테이블 Comment 설정 SQL - reviews
+ALTER TABLE reviews COMMENT '리뷰들';
+-- Foreign Key 설정 SQL - reviews(movie_id) -> movie(id)
+ALTER TABLE reviews
+    ADD CONSTRAINT FK_reviews_movie_id_movie_id FOREIGN KEY (movie_id)
+        REFERENCES movie (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+-- Foreign Key 삭제 SQL - reviews(movie_id)
+-- ALTER TABLE reviews
+-- DROP FOREIGN KEY FK_reviews_movie_id_movie_id;
+-- summarized_reviews Table Create SQL
+-- 테이블 생성 SQL - summarized_reviews
+CREATE TABLE summarized_reviews
+(
+    `id`        INT     NOT NULL    AUTO_INCREMENT COMMENT '요약 id', 
+    `movie_id`  INT     NOT NULL    COMMENT '영화id', 
+    `rating`    INT     NOT NULL    COMMENT '분석된 별점 구간', 
+    `summary`   TEXT    NOT NULL    COMMENT '리뷰 요약 내용', 
+     PRIMARY KEY (id)
+);
+-- 테이블 Comment 설정 SQL - summarized_reviews
+ALTER TABLE summarized_reviews COMMENT '리뷰들 요약';
+-- Foreign Key 설정 SQL - summarized_reviews(movie_id) -> movie(id)
+ALTER TABLE summarized_reviews
+    ADD CONSTRAINT FK_summarized_reviews_movie_id_movie_id FOREIGN KEY (movie_id)
+        REFERENCES movie (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+-- Foreign Key 삭제 SQL - summarized_reviews(movie_id)
+-- ALTER TABLE summarized_reviews
+-- DROP FOREIGN KEY FK_summarized_reviews_movie_id_movie_id;
