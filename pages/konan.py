@@ -1,5 +1,13 @@
+import pymysql
 import streamlit as st
-from test_codes.selectbox import *
+import sys
+import os
+
+# test_codes의 절대 경로 추가 (직접 지정)
+sys.path.append(r'C:/Users/kwkwo/film-rate-trust-ai/test_codes')
+
+# selectbox 모듈 가져오기
+from selectbox import *
 
 
 st.title('명탐정 코난: 시한장치의 마천루 (2024)')
@@ -7,28 +15,32 @@ st.markdown('<span style="font-size: 18px;">네이버 리뷰 평점 별 관람�
 
 st.image("data/movie_poster/konan.jpeg", width=200, use_column_width=False)
 
-## sql DB 연결
+# 데이터베이스 연결 설정
+conn = pymysql.connect(
+    host=st.secrets["mysql"]["host"],
+    port=st.secrets["mysql"]["port"],
+    user=st.secrets["mysql"]["user"],
+    password=st.secrets["mysql"]["password"],
+    database=st.secrets["mysql"]["database"])
 
-# Initialize connection 
-conn = st.connection('mysql', type='sql')
 # Perform query.
-df = conn.query('SELECT * from summarized_reviews;', ttl=600)
+df = conn.query('SELECT * from summarized_reviews;')
 
 selected_option = ranking_selectbox()
 
 if st.button("조회하기"):
     if selected_option == "⭐⭐⭐⭐⭐":
-        st.write(df['summary'][0])
-        # st.write("9~10점짜리 리뷰 요약글(df 연결 전)")
+        # st.write(df['summary'][0])
+        st.write("9~10점짜리 리뷰 요약글(df 연결 전)")
     elif selected_option == "⭐⭐⭐⭐":
-        st.write(df['summary'][1])
-        # st.write("7~8점짜리 리뷰 요약글(df 연결 전)")
+        # st.write(df['summary'][1])
+        st.write("7~8점짜리 리뷰 요약글(df 연결 전)")
     elif selected_option == "⭐⭐⭐":
-        st.write(df['summary'][2]) 
-        # st.write("5~6점짜리 리뷰 요약글(df 연결 전)")   
+        # st.write(df['summary'][2]) 
+        st.write("5~6점짜리 리뷰 요약글(df 연결 전)")   
     elif selected_option == "⭐⭐":
-        st.write(df['summary'][3])  
-        # st.write("3~4점짜리 리뷰 요약글(df 연결 전)")
+        # st.write(df['summary'][3])  
+        st.write("3~4점짜리 리뷰 요약글(df 연결 전)")
     else:
-       st.write(df['summary'][4])
-       # st.write("0~2점짜리 리뷰 요약글(df 연결 전)")
+       # st.write(df['summary'][4])
+       st.write("0~2점짜리 리뷰 요약글(df 연결 전)")
