@@ -62,7 +62,7 @@ class ReviewPredictor:
 
         return result
 
-    def insert_reviews(self, data):
+    def insert_reviews(self, data,movie_id):
         try:
             with closing(pymysql.connect(
                     host=self.host,
@@ -76,15 +76,16 @@ class ReviewPredictor:
                     for _, row in data.iterrows():
                         sentiment_score = row['sentiment_score']
                         new_rating = row['new_rating']
-                        review_text = row['review']  # 리뷰 텍스트를 고유 식별자로 사용
+                        id = row['id']  # 리뷰 텍스트를 고유 식별자로 사용
+                        movie_id=movie_id
 
                         # 특정 리뷰에 대해 sentiment_score와 new_rating 값을 업데이트
                         sql = """
                         UPDATE reviews
                         SET new_rating = %s, sentiment_score = %s
-                        WHERE review = %s;
+                        WHERE id=%s AND movie_id=%s;
                         """
-                        cursor.execute(sql, (new_rating, sentiment_score, review_text))
+                        cursor.execute(sql, (new_rating, sentiment_score, id,movie_id))
 
                     # 변경사항 커밋
                     db.commit()
@@ -94,6 +95,16 @@ class ReviewPredictor:
                 db.rollback()
 
 
+'''
+사용 방법
+db_config(host, port, user, pw, db_name) 입력 후
+predictor=ReviewPredictor(db_config)
+predictor.fetch_reviews()
+result=predictor.predict_sentiment()
+for i in range(1,6): # movie 개수에 맞게 설정
+    predictor.insert_reviews(result,i) 
+
+'''
 
 
 
