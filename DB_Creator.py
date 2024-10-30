@@ -1,7 +1,7 @@
 import pymysql
 import pandas as pd
 import os
-from DataCreator import DataCreator
+from Data_Creator import DataCreator
 from contextlib import closing
 
 class ReviewPredictor:
