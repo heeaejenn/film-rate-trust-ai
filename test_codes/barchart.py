@@ -78,7 +78,7 @@ def create_bar_chart(movie_id, df):
     ax.set_xticklabels(bars, fontsize=30)  # Set font size for x-tick labels
 
     # 폰트 설정
-    plt.rc('font', family='Malgun Gothic')  # 또는 'NanumGothic'
+    plt.rc('font', family='NanumGothic')  # 또는 'Malgun Gothic'
     plt.rcParams['axes.unicode_minus'] = False  # 한글 폰트 사용 시 마이너스 기호 깨짐 방지
 
     # Customize chart
