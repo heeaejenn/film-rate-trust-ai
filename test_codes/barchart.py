@@ -77,21 +77,27 @@ def create_bar_chart(movie_id, df):
 
     # Set x-tick labels and adjust font size
     ax.set_xticks(range(len(bars)))  # Set x-ticks to the positions of the bars
-    ax.set_xticklabels(bars, fontsize=100, fontproperties=font_prop)  # Set font size for x-tick labels
+    ax.set_xticklabels(bars, fontsize=30)  # Set font size for x-tick labels
 
-    # Customize chart title with if conditions
+    # Set y-tick labels font size
+    ax.tick_params(axis='y', labelsize=25)  # Increase y-axis tick labels font size
+
+    # Customize chart title using if conditions
     if movie_id == 1:
-        ax.set_title('Rating Distribution Comparison for 베테랑2', fontsize=35, fontproperties=font_prop)
+        title = 'Rating Distribution Comparison for 베테랑2'
     elif movie_id == 2:
-        ax.set_title('Rating Distribution Comparison for 노트북', fontsize=35, fontproperties=font_prop)
+        title = 'Rating Distribution Comparison for 노트북'
     elif movie_id == 3:
-        ax.set_title('Rating Distribution Comparison for 명탐정 코난', fontsize=35, fontproperties=font_prop)
+        title = 'Rating Distribution Comparison for 명탐정 코난'
     elif movie_id == 4:
-        ax.set_title('Rating Distribution Comparison for 조커', fontsize=35, fontproperties=font_prop)
+        title = 'Rating Distribution Comparison for 조커'
     elif movie_id == 5:
-        ax.set_title('Rating Distribution Comparison for 가문의 영광', fontsize=35, fontproperties=font_prop)
+        title = 'Rating Distribution Comparison for 가문의 영광'
     else:
-        ax.set_title('영화 못찾음', fontsize=30, fontproperties=font_prop)
+        title = '영화 못찾음'
 
-    ax.set_ylabel('Percentage of Reviews', fontsize=25)
+    # Set title using plt.suptitle()
+    plt.suptitle(title, fontsize=40, fontproperties=font_prop, y=0.93)
+
+    ax.set_ylabel('Percentage of Reviews', fontsize=30)  # Increased font size for y-axis label
     return st.pyplot(fig)
