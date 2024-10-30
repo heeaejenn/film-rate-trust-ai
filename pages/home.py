@@ -12,8 +12,8 @@ with col1:
     st.page_link("pages/notebook.py", label="[1위] 노트북 (2004)")
 
 with col2:
-    st.image("data/movie_poster/konan.jpeg", width=300, use_column_width=True)
-    st.page_link("pages/konan.py", label="[2위] 명탐정 코난 (2024)")
+    st.image("data/movie_poster/master.jpeg", width=300, use_column_width=True)
+    st.page_link("pages/master.py", label="[2위] 타짜: 원 아이드 잭 (2024)")
 
 with col3:
     st.image("data/movie_poster/veteran.jpeg", width=300, use_column_width=True)

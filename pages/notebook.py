@@ -2,17 +2,22 @@ import pymysql
 import streamlit as st
 import sys
 import os
+import pandas as pd
 
-# test_codes의 절대 경로 추가 (직접 지정)
-sys.path.append(r'C:/Users/kwkwo/film-rate-trust-ai/test_codes')
 
-# selectbox 모듈 가져오기
+# 테스트 코드가 있는 디렉토리를 경로에 추가
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../test_codes')))
+
+# selectbox, barchart 모듈 가져오기
 from selectbox import *
+from barchart import *
 
 st.title('노트북 (2004)')
 st.markdown('<span style="font-size: 18px;">네이버 리뷰 평점 별 관람평 요약</span>', unsafe_allow_html=True)
 
-st.image("data/movie_poster/notebook.jpeg", width=200, use_column_width=False)
+# st.image("data/movie_poster/notebook.jpeg", width=200, use_column_width=False)
+df_reviews = connect_reviews_table()
+chart_image = create_bar_chart(4, df_reviews)
 
 # 데이터베이스 연결 설정
 conn = pymysql.connect(
@@ -42,36 +47,36 @@ selected_option = ranking_selectbox()
 if st.button("조회하기"):
     if selected_option == "⭐⭐⭐⭐⭐":
         # 조건에 맞는 행 필터링
-        filtered_df_2_10 = df[(df['movie_id'] == 2) & (df['rating'] == 10)]
+        filtered_df_4_10 = df[(df['movie_id'] == 4) & (df['rating'] == 10)]
         # summary 값 추출
-        summary_value_2_10 = filtered_df_2_10['summary'].iloc[0] if not filtered_df_2_10.empty else None
-        st.write(summary_value_2_10)
+        summary_value_4_10 = filtered_df_4_10['summary'].iloc[0] if not filtered_df_4_10.empty else None
+        st.write(summary_value_4_10)
         # st.write("9~10점짜리 리뷰 요약글(df 연결 전)")
     elif selected_option == "⭐⭐⭐⭐":
         # 조건에 맞는 행 필터링
-        filtered_df_2_8 = df[(df['movie_id'] == 2) & (df['rating'] == 8)]
+        filtered_df_4_8 = df[(df['movie_id'] == 4) & (df['rating'] == 8)]
         # summary 값 추출
-        summary_value_2_8 = filtered_df_2_8['summary'].iloc[0] if not filtered_df_2_8.empty else None
-        st.write(summary_value_2_8)
+        summary_value_4_8 = filtered_df_4_8['summary'].iloc[0] if not filtered_df_4_8.empty else None
+        st.write(summary_value_4_8)
         # st.write("9~10점짜리 리뷰 요약글(df 연결 전)")
     elif selected_option == "⭐⭐⭐":
         # 조건에 맞는 행 필터링
-        filtered_df_2_6 = df[(df['movie_id'] == 2) & (df['rating'] == 6)]
+        filtered_df_4_6 = df[(df['movie_id'] == 4) & (df['rating'] == 6)]
         # summary 값 추출
-        summary_value_2_6 = filtered_df_2_6['summary'].iloc[0] if not filtered_df_2_6.empty else None
-        st.write(summary_value_2_6)
+        summary_value_4_6 = filtered_df_4_6['summary'].iloc[0] if not filtered_df_4_6.empty else None
+        st.write(summary_value_4_6)
         # st.write("9~10점짜리 리뷰 요약글(df 연결 전)")
     elif selected_option == "⭐⭐":
         # 조건에 맞는 행 필터링
-        filtered_df_2_4 = df[(df['movie_id'] == 2) & (df['rating'] == 4)]
+        filtered_df_4_4 = df[(df['movie_id'] == 4) & (df['rating'] == 4)]
         # summary 값 추출
-        summary_value_2_4 = filtered_df_2_4['summary'].iloc[0] if not filtered_df_2_4.empty else None
-        st.write(summary_value_2_4)
+        summary_value_4_4 = filtered_df_4_4['summary'].iloc[0] if not filtered_df_4_4.empty else None
+        st.write(summary_value_4_4)
         # st.write("9~10점짜리 리뷰 요약글(df 연결 전)")
     else:
         # 조건에 맞는 행 필터링
-        filtered_df_2_2 = df[(df['movie_id'] == 2) & (df['rating'] == 2)]
+        filtered_df_4_2 = df[(df['movie_id'] == 4) & (df['rating'] == 2)]
         # summary 값 추출
-        summary_value_2_2 = filtered_df_2_2['summary'].iloc[0] if not filtered_df_2_2.empty else None
-        st.write(summary_value_2_2)
+        summary_value_4_2 = filtered_df_4_2['summary'].iloc[0] if not filtered_df_4_2.empty else None
+        st.write(summary_value_4_2)
         # st.write("9~10점짜리 리뷰 요약글(df 연결 전)")

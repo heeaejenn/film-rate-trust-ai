@@ -86,13 +86,13 @@ def create_bar_chart(movie_id, df):
     if movie_id == 1:
         title = 'Rating Distribution Comparison for 베테랑2'
     elif movie_id == 2:
-        title = 'Rating Distribution Comparison for 노트북'
-    elif movie_id == 3:
-        title = 'Rating Distribution Comparison for 명탐정 코난'
-    elif movie_id == 4:
-        title = 'Rating Distribution Comparison for 조커'
-    elif movie_id == 5:
         title = 'Rating Distribution Comparison for 가문의 영광'
+    elif movie_id == 3:
+        title = 'Rating Distribution Comparison for 타짜'
+    elif movie_id == 4:
+        title = 'Rating Distribution Comparison for 노트북'
+    elif movie_id == 5:  
+        title = 'Rating Distribution Comparison for 조커'
     else:
         title = '영화 못찾음'
 

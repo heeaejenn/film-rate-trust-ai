@@ -2,18 +2,22 @@ import pymysql
 import streamlit as st
 import sys
 import os
+import pandas as pd
 
-# test_codes의 절대 경로 추가 (직접 지정)
-sys.path.append(r'C:/Users/kwkwo/film-rate-trust-ai/test_codes')
+# 테스트 코드가 있는 디렉토리를 경로에 추가
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../test_codes')))
 
-# selectbox 모듈 가져오기
+# selectbox, barchart 모듈 가져오기
 from selectbox import *
+from barchart import *
 
 
-st.title('명탐정 코난: 시한장치의 마천루 (2024)')
+st.title('타짜: 원 아이드 잭 (2019)')
 st.markdown('<span style="font-size: 18px;">네이버 리뷰 평점 별 관람평 요약</span>', unsafe_allow_html=True)
 
-st.image("data/movie_poster/konan.jpeg", width=200, use_column_width=False)
+# st.image("data/movie_poster/master.jpeg", width=200, use_column_width=False)
+df_reviews = connect_reviews_table()
+chart_image = create_bar_chart(3, df_reviews)
 
 # 데이터베이스 연결 설정
 conn = pymysql.connect(
