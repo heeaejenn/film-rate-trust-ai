@@ -4,16 +4,28 @@ import sys
 import os
 import pandas as pd
 
+
 # 테스트 코드가 있는 디렉토리를 경로에 추가
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../test_codes')))
 
-# selectbox 모듈 가져오기
+# selectbox, barchart 모듈 가져오기
 from selectbox import *
+from barchart import *
 
 st.title('베테랑2 (2024)')
 st.markdown('<span style="font-size: 18px;">네이버 리뷰 평점 별 관람평 요약</span>', unsafe_allow_html=True)
 
-st.image("data/movie_poster/veteran.jpeg", width=200, use_column_width=False)
+# col1, col2 = st.columns(2)
+
+# with col1:
+df_reviews = connect_reviews_table()
+chart_image = create_bar_chart(1, df_reviews)
+    
+    # st.image(chart_image, width=350, use_column_width=True)
+
+
+# with col2:
+#     st.image("data/movie_poster/veteran.jpeg", width=225, use_column_width=False)
 
 # 데이터베이스 연결 설정
 conn = pymysql.connect(
