@@ -33,12 +33,9 @@ def connect_reviews_table():
 
 def create_bar_chart(movie_id, df):
 
-    # Set font path
-    font_path = fm.findSystemFonts(fontpaths=None, fontext='ttf')
-    for path in font_path:
-        if 'NanumGothic' in path:
-            font_name = fm.FontProperties(fname=path).get_name()
-            plt.rc('font', family=font_name)
+    # 한글 폰트 설정
+    font_path = 'C://Windows//Fonts//malgun.ttf'  # 시스템에 설치된 NanumGothic 폰트 경로
+    font_prop = fm.FontProperties(fname=font_path)
 
     df = connect_reviews_table()  # 데이터프레임 가져오기
     df_movie = df[df['movie_id'] == movie_id]
@@ -86,19 +83,22 @@ def create_bar_chart(movie_id, df):
     plt.rc('font', family='Malgun Gothic')  # 또는 'Malgun Gothic'
     plt.rcParams['axes.unicode_minus'] = False  # 한글 폰트 사용 시 마이너스 기호 깨짐 방지
 
+    # 제목 크기를 포함한 font_prop 설정
+    font_prop.set_size(35)  # 원하는 크기로 설정
+
     # Customize chart
     ax.set_ylabel('Percentage of Reviews', fontsize=25)
     if movie_id == 1:
-        ax.set_title('Rating Distribution Comparison for 베테랑2', fontsize=35)
+        ax.set_title('Rating Distribution Comparison for 베테랑2', fontsize=35, fontproperties=font_prop)
     elif movie_id == 2:
-        ax.set_title('Rating Distribution Comparison for 노트북', fontsize=35)
+        ax.set_title('Rating Distribution Comparison for 노트북', fontsize=35, fontproperties=font_prop)
     elif movie_id == 3:
-        ax.set_title('Rating Distribution Comparison for 명탐정 코난', fontsize=35)
+        ax.set_title('Rating Distribution Comparison for 명탐정 코난', fontsize=35, fontproperties=font_prop)
     elif movie_id == 4:
-        ax.set_title('Rating Distribution Comparison for 조커', fontsize=35)
+        ax.set_title('Rating Distribution Comparison for 조커', fontsize=35, fontproperties=font_prop)
     elif movie_id == 5:
-        ax.set_title('Rating Distribution Comparison for 가문의 영광', fontsize=35)
+        ax.set_title('Rating Distribution Comparison for 가문의 영광', fontsize=35, fontproperties=font_prop)
     else:
-        ax.set_title('영화 못찾음', fontsize=30)
+        ax.set_title('영화 못찾음', fontsize=30, fontproperties=font_prop)
 
     return st.pyplot(fig)
