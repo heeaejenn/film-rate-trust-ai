@@ -4,6 +4,7 @@ from langchain_core.output_parsers import StrOutputParser
 from dotenv import load_dotenv
 import pymysql
 import os
+import sys
 
 # 환경변수 로드
 load_dotenv()
@@ -89,4 +90,9 @@ def summarize_all(title):
     db.commit()
     db.close()
 
-summarize_all("베테랑2")
+if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        argument = sys.argv[1]
+        summarize_all(argument)
+    else:
+        print("No argument provided.")
