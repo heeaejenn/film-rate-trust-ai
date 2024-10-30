@@ -4,6 +4,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
 
+# 폰트 파일 경로 설정
+font_path = r'data/Noto_Sans_KR/static/NotoSansKR-Regular.ttf'
+font_prop = fm.FontProperties(fname=font_path)
+
 def connect_reviews_table():
     # 데이터베이스 연결 설정
     conn = pymysql.connect(
@@ -32,10 +36,6 @@ def connect_reviews_table():
     return df
 
 def create_bar_chart(movie_id, df):
-
-    # 한글 폰트 설정
-    font_path = 'C://Windows//Fonts//malgun.ttf'  # 시스템에 설치된 NanumGothic 폰트 경로
-    font_prop = fm.FontProperties(fname=font_path)
 
     df = connect_reviews_table()  # 데이터프레임 가져오기
     df_movie = df[df['movie_id'] == movie_id]
@@ -77,17 +77,9 @@ def create_bar_chart(movie_id, df):
 
     # Set x-tick labels and adjust font size
     ax.set_xticks(range(len(bars)))  # Set x-ticks to the positions of the bars
-    ax.set_xticklabels(bars, fontsize=30)  # Set font size for x-tick labels
+    ax.set_xticklabels(bars, fontsize=100, fontproperties=font_prop)  # Set font size for x-tick labels
 
-    # 폰트 설정
-    plt.rc('font', family='Malgun Gothic')  # 또는 'Malgun Gothic'
-    plt.rcParams['axes.unicode_minus'] = False  # 한글 폰트 사용 시 마이너스 기호 깨짐 방지
-
-    # 제목 크기를 포함한 font_prop 설정
-    font_prop.set_size(35)  # 원하는 크기로 설정
-
-    # Customize chart
-    ax.set_ylabel('Percentage of Reviews', fontsize=25)
+    # Customize chart title with if conditions
     if movie_id == 1:
         ax.set_title('Rating Distribution Comparison for 베테랑2', fontsize=35, fontproperties=font_prop)
     elif movie_id == 2:
@@ -101,4 +93,5 @@ def create_bar_chart(movie_id, df):
     else:
         ax.set_title('영화 못찾음', fontsize=30, fontproperties=font_prop)
 
+    ax.set_ylabel('Percentage of Reviews', fontsize=25)
     return st.pyplot(fig)

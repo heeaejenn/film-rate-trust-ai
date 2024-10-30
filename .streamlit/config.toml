@@ -1,5 +1,2 @@
 [client]
 showSidebarNavigation = false
-
-[global]
-font = "Malgun Gothic"  # 사용할 폰트 이름
