@@ -33,9 +33,14 @@ def connect_reviews_table():
 
 def create_bar_chart(movie_id, df):
 
-    connect_reviews_table()
-    # Filter for movie_id 1
-    # df_movie = df[df['movie_id'] == 1]
+    # Set font path
+    font_path = fm.findSystemFonts(fontpaths=None, fontext='ttf')
+    for path in font_path:
+        if 'NanumGothic' in path:
+            font_name = fm.FontProperties(fname=path).get_name()
+            plt.rc('font', family=font_name)
+
+    df = connect_reviews_table()  # 데이터프레임 가져오기
     df_movie = df[df['movie_id'] == movie_id]
 
     # Define rating ranges
@@ -78,7 +83,7 @@ def create_bar_chart(movie_id, df):
     ax.set_xticklabels(bars, fontsize=30)  # Set font size for x-tick labels
 
     # 폰트 설정
-    plt.rc('font', family='NanumGothic')  # 또는 'Malgun Gothic'
+    plt.rc('font', family='Malgun Gothic')  # 또는 'Malgun Gothic'
     plt.rcParams['axes.unicode_minus'] = False  # 한글 폰트 사용 시 마이너스 기호 깨짐 방지
 
     # Customize chart
@@ -97,4 +102,3 @@ def create_bar_chart(movie_id, df):
         ax.set_title('영화 못찾음', fontsize=30)
 
     return st.pyplot(fig)
-
