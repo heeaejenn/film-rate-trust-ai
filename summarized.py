@@ -33,7 +33,7 @@ chain = prompt | model | StrOutputParser()
 
 # 리뷰 요약
 def summarize(reviews):
-    summary = chain.invoke({"reviews": reviews})
+    summary = chain.batch(reviews)
     return summary
 
 # 구간별 리뷰를 요약 후 DB 작성
@@ -77,10 +77,14 @@ def summarize_all(title):
     new8to10 = [line[0] for line in new8to10]
 
     reviews = [new0to2, new2to4, new4to6, new6to8, new8to10]
-    summary = []
+
+    input_list = []
 
     for review in reviews:
-        summary.append(summarize(review))
+        rev_input = {"reviews": review}
+        input_list.append(rev_input)
+
+    summary = summarize(input_list)
 
     # summary insert 
     for i, summarized_review in enumerate(summary):
