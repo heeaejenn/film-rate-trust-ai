@@ -1,1 +1,0 @@
-# film-rate-trust-ai
