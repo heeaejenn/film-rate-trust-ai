@@ -34,40 +34,50 @@ $ run_sentiment.py
 1. **movie_data_crawl.py**
    - 영화 리뷰 데이터 크롤링
    - DB 접근 후 영화 제목, 원래 별점, 리뷰 입력
+     
 2. **KoBERT_Sentiment.py**
    - 데이터 로드 및 전처리 진행
    - 학습한 모델 불러오기
    - 모델 적용 및 긍정 확률 반환
+     
 3. **Data_Creator.py**
    - KoBERT_sentiment 불러오기
-   - sentiment_score, new_rating 적용한 데이터프레임 반환 
+   - sentiment_score, new_rating 적용한 데이터프레임 반환
+     
 4. **DB_Creator.py**
    - DB 접근 및 데이터 불러오기
    - Data_Creator 불러오기
    - DB에 sentiment_score,new_rating 업데이트
+     
 5. **summarized.py**
-   - 새로운 별점으로 분류된 리뷰 요약 진행 
+   - 새로운 별점으로 분류된 리뷰 요약 진행
+     
 6. **main.py**
    - 페이지 제목, 아이콘, 레이아웃 설정
    - 홈 페이지 및 영화별 페이지 생성
    - 홈과 영화 목록을 위한 내비게이션 메뉴 설정
+     
 7. **pages/home.py**
    - 영화 제목 및 서브헤더 설정
    - 네이버 관람평 요약본 안내
    - 영화 포스터와 관련 페이지 링크 생성
+     
 8. **pages/family.py ~ 나머지 .py**
    - 영화 제목 및 설명 설정
    - 영화 기본 정보 및 포스터 표시
    - 관람평 분석을 위한 데이터베이스 연결 및 차트 생성
    - 관람객 평점 및 관람평 요약 선택 기능 제공
+     
 9. **visualizers/barchart.py**
    - 데이터베이스 연결 및 데이터 가져오기
    - 바 차트 생성 로직
    - 디스플레이 기능
+     
 10. **visualizers/selectbox.py**
    - 평점 요약 선택 상자 표시
    - 데이터프레임 생성
    - 사용자 선택 옵션 반환
+     
 11. **visualizers/sum_reviews.py**
    - 영화 리뷰 데이터베이스 연결
    - 영화 ID에 따른 리뷰 요약 조회
