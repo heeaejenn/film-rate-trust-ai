@@ -95,16 +95,7 @@ class ReviewPredictor:
                 db.rollback()
 
 
-'''
-사용 방법
-db_config(host, port, user, pw, db_name) 입력 후
-predictor=ReviewPredictor(db_config)
-predictor.fetch_reviews()
-result=predictor.predict_sentiment()
-for i in range(1,6): # movie 개수에 맞게 설정
-    predictor.insert_reviews(result,i) 
 
-'''
 
 
 

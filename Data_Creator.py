@@ -5,8 +5,6 @@ class DataCreator:
     def __init__(self, data, model_save_path):
         # 데이터 로드 및 전처리
         self.df = data
-        # self.df = self.data.dropna(how='any')
-        # self.df.drop_duplicates(subset=['review'], inplace=True)
 
         # 모델 설정
         self.model_save_path = model_save_path
@@ -29,7 +27,7 @@ class DataCreator:
         results_df['id']=self.df['id'][:num_samples].reset_index(drop=True)
         results_df['movie_id']=self.df['movie_id'][:num_samples].reset_index(drop=True)
         results_df['original_rating'] = self.df['original_rating'][:num_samples].reset_index(drop=True)
-        results_df['new_rating'] = results_df['sentiment_score'] * results_df['original_rating']
+        results_df['new_rating'] = ((results_df['sentiment_score']*10*2) + (results_df['original_rating']*1))/(1+2)
         results_df['new_rating'] = round(results_df['new_rating'])
 
         return results_df
