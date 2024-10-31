@@ -36,7 +36,6 @@ def connect_reviews_table():
     return df
 
 def create_bar_chart(movie_id, df):
-
     df = connect_reviews_table()  # 데이터프레임 가져오기
     df_movie = df[df['movie_id'] == movie_id]
 
@@ -64,7 +63,15 @@ def create_bar_chart(movie_id, df):
     for i, (label, color) in enumerate(zip(rating_labels, rating_colors)):
         height = original_counts[label] if label in original_counts else 0
         ax.bar(bars[0], height, bottom=bottom, color=color, label=label if i == 0 else "")
-        ax.text(bars[0], bottom + height / 2, f'{label}\n{height:.2f}%', ha='center', va='center', color='black', fontsize=30)
+        
+        # Determine the x-position for label text
+        if height <= 8:  # Change to 8% for low percentages
+            ax.text(0.45, bottom + height / 2, f'{height:.2f}%', ha='left', va='center', color='black', fontsize=30)  # Move to the right (adjusted)
+            # Draw a line connecting the bar and label
+            ax.plot([0, 0.45], [bottom + height / 2, bottom + height / 2], color='black', linestyle='--')
+        else:
+            ax.text(0, bottom + height / 2, f'{label}\n{height:.2f}%', ha='center', va='center', color='black', fontsize=30)  # Stay in the center
+            
         bottom += height
 
     # Create the stacked bar for new rating
@@ -72,7 +79,15 @@ def create_bar_chart(movie_id, df):
     for i, (label, color) in enumerate(zip(rating_labels, rating_colors)):
         height = new_counts[label] if label in new_counts else 0
         ax.bar(bars[1], height, bottom=bottom, color=color)
-        ax.text(bars[1], bottom + height / 2, f'{label}\n{height:.2f}%', ha='center', va='center', color='black', fontsize=30)
+
+        # Determine the x-position for label text
+        if height <= 8:  # Change to 8% for low percentages
+            ax.text(1.35, bottom + height / 2, f'{height:.2f}%', ha='left', va='center', color='black', fontsize=30)  # Move to the right (adjusted)
+            # Draw a line connecting the bar and label
+            ax.plot([1, 1.35], [bottom + height / 2, bottom + height / 2], color='black', linestyle='--')
+        else:
+            ax.text(1, bottom + height / 2, f'{label}\n{height:.2f}%', ha='center', va='center', color='black', fontsize=30)  # Stay in the center
+            
         bottom += height
 
     # Set x-tick labels and adjust font size

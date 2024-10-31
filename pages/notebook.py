@@ -6,77 +6,106 @@ import pandas as pd
 
 
 # 테스트 코드가 있는 디렉토리를 경로에 추가
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../test_codes')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../visualizers')))
 
 # selectbox, barchart 모듈 가져오기
 from selectbox import *
 from barchart import *
+from sum_reviews import *
 
 st.title('노트북 (2004)')
 st.markdown('<span style="font-size: 18px;">네이버 리뷰 평점 별 관람평 요약</span>', unsafe_allow_html=True)
 
-# st.image("data/movie_poster/notebook.jpeg", width=200, use_column_width=False)
+st.markdown("""
+    <style>
+    .custom-subheader {
+        font-size: 20px; /* Increase font size */
+        font-weight: bold; /* Make text bold */
+        color: #333; /* Adjust color if needed */
+        margin-bottom: 5px; /* Reduce space below the subheader */
+    }
+    .custom-divider {
+        border: none;
+        border-top: 1px solid gray; /* Gray divider line */
+        margin-top: 0px; /* Reduce space above the divider */
+        margin-bottom: 10px; /* Adjust space below the divider */
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+# Use HTML for the subheader with custom class
+st.markdown('<p class="custom-subheader">기본 정보</p>', unsafe_allow_html=True)
+
+# Add a gray divider closer to the subheader
+st.markdown('<hr class="custom-divider">', unsafe_allow_html=True)
+
+
+col1, col2 = st.columns(2)
+
+with col1:
+    st.image("data/movie_poster/notebook.jpeg", width=225, use_column_width=False)
+with col2:
+    st.markdown("""
+    <style>
+    .info-table {
+        font-family: Arial, sans-serif;
+        font-size: 16px;
+        line-height: 1.6;
+    }
+    .rating-section {
+        margin-top: 20px;
+        font-family: Arial, sans-serif;
+        font-size: 16px;
+    }
+    .rating-score {
+        font-weight: bold;
+        font-size: 18px;
+        color: #007BFF; /* Blue color for the rating score */
+    }
+    </style>
+
+    <div class="info-table">
+        <p><strong>개봉</strong> 2004.11.26.</p>
+        <p><strong>등급</strong> 15세 이상 관람가</p>
+        <p><strong>장르</strong> 멜로/로맨스, 드라마</p>
+        <p><strong>국가</strong> 미국</p>
+        <p><strong>러닝타임</strong> 123분</p>
+        <p><strong>배급</strong> 에무필름즈, (주)퍼스트런</p>
+        <p><strong>소설</strong> 소설</p>
+    </div>
+
+    <div class="rating-section">
+        <p><strong>실관람객 평점</strong> 9.45/10</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+# Custom CSS to change subheader font size and adjust divider spacing
+st.markdown("""
+    <style>
+    .custom-subheader {
+        font-size: 20px; /* Increase font size */
+        font-weight: bold; /* Make text bold */
+        color: #333; /* Adjust color if needed */
+        margin-bottom: 5px; /* Reduce space below the subheader */
+    }
+    .custom-divider {
+        border: none;
+        border-top: 1px solid gray; /* Gray divider line */
+        margin-top: 0px; /* Reduce space above the divider */
+        margin-bottom: 10px; /* Adjust space below the divider */
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+# Use HTML for the subheader with custom class
+st.markdown('<p class="custom-subheader">관람평 분석</p>', unsafe_allow_html=True)
+
+# Add a gray divider closer to the subheader
+st.markdown('<hr class="custom-divider">', unsafe_allow_html=True)
+
 df_reviews = connect_reviews_table()
 chart_image = create_bar_chart(4, df_reviews)
 
-# 데이터베이스 연결 설정
-conn = pymysql.connect(
-    host=st.secrets["mysql"]["host"],
-    port=st.secrets["mysql"]["port"],
-    user=st.secrets["mysql"]["user"],
-    password=st.secrets["mysql"]["password"],
-    database=st.secrets["mysql"]["database"])
-
-try:
-    # 데이터베이스 작업 수행
-    with conn.cursor() as cursor:
-        cursor.execute('SELECT * FROM summarized_reviews;')
-        result = cursor.fetchall()
-        # DataFrame 생성
-        df = pd.DataFrame(result, columns=[col[0] for col in cursor.description])
-finally:
-    # 데이터베이스 연결 닫기
-    conn.close()
-
-# movie_id와 rating 열을 숫자로 변환
-df['movie_id'] = pd.to_numeric(df['movie_id'], errors='coerce')
-df['rating'] = pd.to_numeric(df['rating'], errors='coerce')
-
 selected_option = ranking_selectbox()
-
-if st.button("조회하기"):
-    if selected_option == "⭐⭐⭐⭐⭐":
-        # 조건에 맞는 행 필터링
-        filtered_df_4_10 = df[(df['movie_id'] == 4) & (df['rating'] == 10)]
-        # summary 값 추출
-        summary_value_4_10 = filtered_df_4_10['summary'].iloc[0] if not filtered_df_4_10.empty else None
-        st.write(summary_value_4_10)
-        # st.write("9~10점짜리 리뷰 요약글(df 연결 전)")
-    elif selected_option == "⭐⭐⭐⭐":
-        # 조건에 맞는 행 필터링
-        filtered_df_4_8 = df[(df['movie_id'] == 4) & (df['rating'] == 8)]
-        # summary 값 추출
-        summary_value_4_8 = filtered_df_4_8['summary'].iloc[0] if not filtered_df_4_8.empty else None
-        st.write(summary_value_4_8)
-        # st.write("9~10점짜리 리뷰 요약글(df 연결 전)")
-    elif selected_option == "⭐⭐⭐":
-        # 조건에 맞는 행 필터링
-        filtered_df_4_6 = df[(df['movie_id'] == 4) & (df['rating'] == 6)]
-        # summary 값 추출
-        summary_value_4_6 = filtered_df_4_6['summary'].iloc[0] if not filtered_df_4_6.empty else None
-        st.write(summary_value_4_6)
-        # st.write("9~10점짜리 리뷰 요약글(df 연결 전)")
-    elif selected_option == "⭐⭐":
-        # 조건에 맞는 행 필터링
-        filtered_df_4_4 = df[(df['movie_id'] == 4) & (df['rating'] == 4)]
-        # summary 값 추출
-        summary_value_4_4 = filtered_df_4_4['summary'].iloc[0] if not filtered_df_4_4.empty else None
-        st.write(summary_value_4_4)
-        # st.write("9~10점짜리 리뷰 요약글(df 연결 전)")
-    else:
-        # 조건에 맞는 행 필터링
-        filtered_df_4_2 = df[(df['movie_id'] == 4) & (df['rating'] == 2)]
-        # summary 값 추출
-        summary_value_4_2 = filtered_df_4_2['summary'].iloc[0] if not filtered_df_4_2.empty else None
-        st.write(summary_value_4_2)
-        # st.write("9~10점짜리 리뷰 요약글(df 연결 전)")
+df_reviews = get_sum_reviews_tables(movie_id=4)
+get_sum_review_by_ranking(df_reviews, selected_option)
