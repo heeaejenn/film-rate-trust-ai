@@ -13,10 +13,24 @@
 3. **openai**
    - 주로 OpenAI API와의 통신을 위해 활용되며, GPT를 사용하기 위해 사용 되었습니다.
    - [OpenAI Documentation](https://beta.openai.com/docs/)
+     
 4. **langchain**
    - 프롬프트 체이닝을 통해 간단한 출력흐름을 구성하여 사용하기 위해 사용 되었습니다.
    - [LangChain Documentation](https://python.langchain.com/docs/)
 
+5. **streamlit**
+   - 웹 애플리케이션을 쉽게 만들고 데이터 시각화 및 사용자 인터페이스 구축을 지원합니다.
+   - [Streamlit Documentation](https://docs.streamlit.io/)
+     
+6. **matplotlib**
+   - 데이터 시각화를 위한 그래프와 차트를 생성하여 영화 리뷰 분석 결과를 직관적으로 전달합니다.
+   - [Matplotlib Documentation](https://matplotlib.org/stable/index.html)
+  
+7. **pandas**
+   - 영화 리뷰 데이터를 로드하고 전처리하며, DataFrame 형식으로 구조화하여 데이터 변환 및 조작을 용이하게 합니다.
+   - [Pandas Documentation](https://pandas.pydata.org/docs/)
+
+  
 ## 사용된 모델
 1. **KoBERT**
    - 네이버 영화 리뷰 20만 건 데이터를 이용해 학습시키고 비긴어게인 데이터 7,490건을 테스트 데이터로 활용
