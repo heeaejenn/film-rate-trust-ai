@@ -71,7 +71,7 @@ with col2:
         <p><strong>국가</strong> 미국</p>
         <p><strong>러닝타임</strong> 123분</p>
         <p><strong>배급</strong> 에무필름즈, (주)퍼스트런</p>
-        <p><strong>소설</strong> 소설</p>
+        <p><strong>원작</strong> 소설</p>
     </div>
 
     <div class="rating-section">
