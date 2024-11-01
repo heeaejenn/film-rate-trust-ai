@@ -30,13 +30,39 @@
    - 영화 리뷰 데이터를 로드하고 전처리하며, DataFrame 형식으로 구조화하여 데이터 변환 및 조작을 용이하게 합니다.
    - [Pandas Documentation](https://pandas.pydata.org/docs/)
 
-  
+
 ## 사용된 모델
 1. **KoBERT**
    - 네이버 영화 리뷰 20만 건 데이터를 이용해 학습시키고 비긴어게인 데이터 7,490건을 테스트 데이터로 활용
    - 성능 평가 결과
      val 정확도: 89%
      test 정확도: 94%
+
+## 별점과 감성 분석 점수 계산
+
+### FilmRateTrust AI의 새로운 점수 기준
+
+#### 새로운 점수 계산식
+![새로운 점수 계산식](https://github.com/user-attachments/assets/897d1f95-332a-46c6-bd39-fa6909e7e204)
+
+    예시 1: 원래 별점 2점, 감성 예측 결과 0.18점:
+
+![예시1](https://github.com/user-attachments/assets/89b58869-884e-4977-9cad-5b93cbd6c764)
+
+    예시 2: 원래 별점 5점, 감성 예측 결과 0.40점: 
+
+![예시2](https://github.com/user-attachments/assets/93b5efa6-52a2-4053-9384-bc569ba59b32)
+
+**Streamlit에 표현되는 별점 기준**
+
+| 새로운 별점 | 새로운 점수 구간 |
+|-------------|------------------|
+| 1점         | 0-2              |
+| 2점         | 2-4              |
+| 3점         | 4-6              |
+| 4점         | 6-8              |
+| 5점         | 8-10             |
+
 
 ## 사용법
 ```
