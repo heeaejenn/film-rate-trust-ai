@@ -20,3 +20,5 @@ pg = st.navigation(
 )
 pg.run()
 
+with st.sidebar:
+    st.markdown("[감성 분석 계산식 확인하러 가기](https://github.com/heeaejenn/film-rate-trust-ai/blob/main/README.md) 💡")
